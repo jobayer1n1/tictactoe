@@ -33,13 +33,13 @@ int main()
 
     do
     {
-        system("clear");
+        system("cls");
         printf("- single player\n- multiplayer\n- exit\n- help\n\n->");
         fflush(stdin);
         scanf(" %c",&response);
 
         response = tolower(response);
-        system("clear");
+        system("cls");
 
         if(response=='s')
         {
@@ -116,7 +116,7 @@ void player_move()
         } while(board[row][col] != ' ');
 
         board[row][col]= PLAYER ;
-        system("clear");
+        system("cls");
         print_board();
 
 }
@@ -153,7 +153,7 @@ void computer_move()
 
         } while(board[row][col] != ' ');
 
-        system("clear");
+        system("cls");
 
         board[row][col]=COMPUTER;
         print_board();
@@ -221,7 +221,7 @@ void vs_computer()
     do
     {
 
-        printf("Choose your icon (X/Y) : ");
+        printf("Choose your icon (X/O) : ");
         scanf(" %c",&response);
 
         response = toupper(response);
@@ -245,7 +245,7 @@ void vs_computer()
         COMPUTER = 'X';
     }
 
-    system("clear");
+    system("cls");
 
     do
     {
@@ -303,7 +303,7 @@ void multi_player()
             break;
         }
 
-        system("clear");
+        system("cls");
         printf("Invalid Input\n\n");
 
     } while(1);
@@ -362,12 +362,12 @@ void player_moves()
                     scanf("%d", &col);
                     col--;
 
-                    system("clear");
+                    system("cls");
 
                 } while(board[row][col] != ' '&&check_winner() == ' ');
 
                 board[row][col]=  player1 ;
-                system("clear");
+                system("cls");
             }
             else if(check_winner()!=' ')
             {
@@ -392,7 +392,7 @@ void player_moves()
                     printf("Enter col number : ");
                     scanf(" %d",&col);
                     col--;
-                    system("clear");
+                    system("cls");
 
                 } while(board[row][col] != ' ');
 
@@ -429,7 +429,7 @@ void print_winners()
 
 void computer_first_move()
 {
-    system("clear");
+    system("cls");
     reset_board();
     print_board();
 
@@ -441,7 +441,7 @@ void computer_first_move()
             print_winner();
             return;
         }
-        system("clear");
+        system("cls");
         print_board();
         player_move();
 
@@ -457,7 +457,7 @@ void computer_first_move()
 
 void player_first_move()
 {
-    system("clear");
+    system("cls");
     reset_board();
     print_board();
 
@@ -490,7 +490,7 @@ void help()
 
     printf("1.The game is played on a grid that's 3 squares by 3 squares.\n");
     printf("2.Suppose you are X , your friend or the computer is O . Players take turns putting their marks in empty squares.\n");
-    printf("3.The first player to get 3 of her marks in a row (up, down, across, or diagonally) is the winner.\n");
+    printf("3.The first player to get 3 of their marks in a row (up, down, across, or diagonally) is the winner.\n");
     printf("4.When all 9 squares are full, the game is over. If no player has 3 marks in a row, the game ends in a tie.\n\n");
     printf("Winning conditions -> \n");
 
@@ -533,11 +533,20 @@ void help()
 
     while(1)
     {
-        printf("Inpt \"H\"  ");
+        printf("> ");
         scanf(" %c",&response);
-        if(response=='e')
+        response=toupper(response);
+        if(response=='E')
+        {
+            printf("Thank you for playing this game.");
+            exit(0);
+        }
+        else if(response=='H')
         {
             return;
+        }
+        else{
+            printf("Invalid input.");
         }
     }
 
