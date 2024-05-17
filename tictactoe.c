@@ -346,6 +346,7 @@ void multi_player()
 void player_moves()
 {
         static int x;
+        char response;
 
         if(check_space()==9)
         {
@@ -368,11 +369,13 @@ void player_moves()
                     print_board();
 
                     printf("\nEnter row number : ");
-                    scanf("%d" , &row);
+                    scanf(" %c" ,&response);
+                    row=CharToInt(response);
                     row--;
 
                     printf("Enter col number : ");
-                    scanf("%d", &col);
+                    scanf(" %c", &response);
+                    col=CharToInt(response);
                     col--;
 
                     system("cls");
@@ -399,11 +402,13 @@ void player_moves()
                     print_board();
 
                     printf("\nEnter row number : ");
-                    scanf(" %d",&row);
+                    scanf(" %c" ,&response);
+                    row=CharToInt(response);
                     row--;
 
                     printf("Enter col number : ");
-                    scanf(" %d",&col);
+                    scanf(" %c", &response);
+                    col=CharToInt(response);
                     col--;
                     system("cls");
 
