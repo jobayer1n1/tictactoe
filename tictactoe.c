@@ -533,7 +533,7 @@ void help()
 
     while(1)
     {
-        printf("> ");
+        printf("Inpt \"H\"  ");
         scanf(" %c",&response);
         if(response=='e')
         {
