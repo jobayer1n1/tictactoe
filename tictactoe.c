@@ -26,6 +26,7 @@ void print_winners();
 void computer_first_move();
 void player_first_move();
 void help();
+int CharToInt(char response);
 
 int main()
 {
@@ -98,6 +99,7 @@ void print_board()
 void player_move()
 {
         int row,col;
+        char response;
 
         printf("\n");
 
@@ -106,11 +108,13 @@ void player_move()
         do
         {
             printf("Enter row number : ");
-            scanf("%d" , &row);
+            scanf(" %c" , &response);
+            row=CharToInt(response);
             row--;
 
             printf("Enter col number : ");
-            scanf("%d", &col);
+            scanf(" %c", &response);
+            col=CharToInt(response);
             col--;
 
         } while(board[row][col] != ' ');
@@ -228,6 +232,10 @@ void vs_computer()
 
         if(response == 'E')
         {
+            exit(0);
+        }
+        else if(response== 'H')
+        {
             return;
         }
 
@@ -284,24 +292,29 @@ void multi_player()
 
     do
     {
-        printf("Enter player 1 symbol (X/Y) : ");
+        printf("Enter player 1 symbol (X/O) : ");
         scanf(" %c", &player1);
         player1 = toupper(player1);
 
         if(player1=='E')
         {
-            return;
+            exit(0);
         }
-        if( player1 == 'X')
+        else if( player1 == 'X')
         {
             player2 = 'O';
             break;
         }
-        if(player1 == 'O')
+        else if(player1 == 'O')
         {
             player2 = 'X';
             break;
         }
+        else if(player1 == 'H')
+        {
+            return;
+        }
+
 
         system("cls");
         printf("Invalid Input\n\n");
@@ -550,5 +563,23 @@ void help()
         }
     }
 
+}
 
+
+int CharToInt(char response)
+{
+    response=toupper(response);
+        
+    if(response>= '1' && response <= '3')
+    {
+        return (int)response-48;
+    }
+    else if(response == 'E')
+    {
+        exit(0);
+    }
+    else if(response == 'H')
+    {
+        main();
+    }
 }
