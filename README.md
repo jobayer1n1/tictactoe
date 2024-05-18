@@ -1,1 +1,1 @@
-hello🥵everyone🫦
+aku🥵sayang🫦
