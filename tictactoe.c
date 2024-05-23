@@ -644,4 +644,12 @@ void input_history(char mode)
     }
     fclose(file);
 }
-
+void print_history()
+{
+    FILE*file=fopen("history.txt","r");
+    char c;
+    while(( c=fgetc(file)) !=EOF)
+    {
+        printf("%c",c);
+    }
+}
