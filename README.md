@@ -1,3 +1,3 @@
 features :
-  single player mode
-  multiplayer mode
+  1. single player mode 
+  2. multiplayer mode
