@@ -636,11 +636,11 @@ void input_history(char mode)
     }
     else if(check_winner()==player2&&mode=='m')
     {
-        fprintf(file,"TIME:%S MODE:MULTIPLAYER WINNER:PLAYER2\n",timeString);
+        fprintf(file,"TIME:%s MODE:MULTIPLAYER WINNER:PLAYER2\n",timeString);
     }
     else if(check_winner()==' ')
     {
-        fprintf(file,"TIME:%S MODE:MULTIPLAYER WINNER:TIE\n",timeString);
+        fprintf(file,"TIME:%s MODE:MULTIPLAYER WINNER:TIE\n",timeString);
     }
     fclose(file);
 }
