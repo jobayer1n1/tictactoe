@@ -619,7 +619,7 @@ void input_history(char mode)
     struct tm *localTime = localtime(&currentTime);
 
     char timeString[100];
-    strftime(timeString, sizeof(timeString), "%H:%M:%S %Y-%m-%d", localTime);
+    strftime(timeString, sizeof(timeString), "%H:%M:%S DATE:%d-%m-%Y", localTime);
 
     FILE* file = fopen("history.txt","a");
     if(check_winner()==PLAYER&&mode=='s')
