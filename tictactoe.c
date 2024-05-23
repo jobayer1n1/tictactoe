@@ -201,6 +201,7 @@ void print_winner()
 {
     char winner = check_winner();
 
+
     if( winner == PLAYER )
     {
         printf("\n\n\tYou won!!\n\n");
@@ -345,27 +346,19 @@ void multi_player()
 
 void player_moves()
 {
-        static int x;
         char response;
-
-        if(check_space()==9)
-        {
-            x = rand()%2 +1;
-        }
 
         int row,col;
 
         printf("\n");
 
-        if(x%2 == 0)
-        {
-
             if(check_winner()==' ' && check_space() != 0 )
             {
-                printf("\t-PLAYER 1 TURN-");
-                printf("\n");
+
                 do
                 {
+                    printf("\t-PLAYER 1 TURN-");
+                    printf("\n");
                     print_board();
 
                     printf("\nEnter row number : ");
@@ -379,28 +372,30 @@ void player_moves()
                     col--;
 
                     system("cls");
+
+                if (board[row][col] != ' ')
+                {
+                    printf("INVALID INPUT\n");
+                }
 
                 } while(board[row][col] != ' '&&check_winner() == ' ');
 
                 board[row][col]=  player1 ;
-                system("cls");
+                
             }
             else if(check_winner()!=' ')
             {
                 return;
             }
-        }
-        else
-        {
-            if(check_winner()==' ' && check_space() != 0 )
+        
+        if(check_winner()==' ' && check_space() != 0 )
             {
-                printf("\t-PLAYER 2 TURN-");
-                printf("\n");
 
                 do
                 {
+                    printf("\t-PLAYER 2 TURN-");
+                    printf("\n");
                     print_board();
-
                     printf("\nEnter row number : ");
                     scanf(" %c" ,&response);
                     row=CharToInt(response);
@@ -411,18 +406,20 @@ void player_moves()
                     col=CharToInt(response);
                     col--;
                     system("cls");
-
+                    if (board[row][col] != ' ')
+                    {
+                        printf("INVALID INPUT\n");
+                    }
+                    
                 } while(board[row][col] != ' ');
 
                 board[row][col]=  player2 ;
             }
-            else if(check_winner()!=' ')
-            {
-                return;
-            }
+        else if(check_winner()!=' ')
+        {
+            return;
         }
 
-        x++;
 
 }
 
@@ -588,3 +585,4 @@ int CharToInt(char response)
         main();
     }
 }
+
