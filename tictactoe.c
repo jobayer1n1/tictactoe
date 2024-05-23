@@ -27,6 +27,8 @@ void computer_first_move();
 void player_first_move();
 void help();
 int CharToInt(char response);
+void check_history();
+void input_history(char m);
 
 int main()
 {
@@ -214,6 +216,7 @@ void print_winner()
     {
         printf("\n\n\tIt's a tie.\n\n");
     }
+
 }
 
 
@@ -271,6 +274,8 @@ void vs_computer()
             computer_first_move();
         }
 
+
+        input_history('s');
         do
         {
             printf("Want to play again?(Y/N) - ");
@@ -335,6 +340,9 @@ void multi_player()
 
             print_winners();
             printf("\n");
+
+            input_history('m');
+
             printf("Want to play again?(Y/N) - ");
             scanf(" %c",&response);
             response = toupper(response);
@@ -381,13 +389,13 @@ void player_moves()
                 } while(board[row][col] != ' '&&check_winner() == ' ');
 
                 board[row][col]=  player1 ;
-                
+
             }
             else if(check_winner()!=' ')
             {
                 return;
             }
-        
+
         if(check_winner()==' ' && check_space() != 0 )
             {
 
@@ -410,7 +418,7 @@ void player_moves()
                     {
                         printf("INVALID INPUT\n");
                     }
-                    
+
                 } while(board[row][col] != ' ');
 
                 board[row][col]=  player2 ;
@@ -571,7 +579,7 @@ void help()
 int CharToInt(char response)
 {
     response=toupper(response);
-        
+
     if(response>= '1' && response <= '3')
     {
         return (int)response-48;
@@ -586,3 +594,62 @@ int CharToInt(char response)
     }
 }
 
+void check_history()
+{
+    FILE* file = fopen("history.txt","r");
+    if(file == NULL)
+    {
+        fclose(file);
+        FILE* file = fopen("history.txt","w");
+        fclose(file);
+        return;
+    }
+    else
+    {
+        fclose(file);
+        return;
+    }
+}
+
+
+void input_history(char mode)
+{
+    time_t currentTime = time(NULL);
+
+    struct tm *localTime = localtime(&currentTime);
+
+    char timeString[100];
+    strftime(timeString, sizeof(timeString), "%H:%M:%S DATE:%d-%m-%Y", localTime);
+
+    FILE* file = fopen("history.txt","a");
+    if(check_winner()==PLAYER&&mode=='s')
+    {
+        fprintf(file,"TIME:%s MODE:SINGLE PLAYER WINNER:YOU\n",timeString);
+    }
+    else if(check_winner()==COMPUTER&&mode=='s')
+    {
+        fprintf(file,"TIME:%s MODE:SINGLE PLAYER WINNER:COMPUTER\n",timeString);
+    }
+    else if(check_winner()==player1&&mode=='m')
+    {
+        fprintf(file,"TIME:%s MODE:MULTIPLAYER WINNER:PLAYER1\n",timeString);
+    }
+    else if(check_winner()==player2&&mode=='m')
+    {
+        fprintf(file,"TIME:%s MODE:MULTIPLAYER WINNER:PLAYER2\n",timeString);
+    }
+    else if(check_winner()==' ')
+    {
+        fprintf(file,"TIME:%s MODE:MULTIPLAYER WINNER:IT'S A TIE\n",timeString);
+    }
+    fclose(file);
+}
+void print_history()
+{
+    FILE*file=fopen("history.txt","r");
+    char c;
+    while(( c=fgetc(file)) !=EOF)
+    {
+        printf("%c",c);
+    }
+}
