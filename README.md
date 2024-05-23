@@ -1,1 +1,3 @@
-aku🥵sayang🫦
+features :
+  single player mode
+  multiplayer mode
