@@ -29,7 +29,7 @@ void player_first_move();
 void help();
 int CharToInt(char response);
 void check_history();
-void input_history(char m);
+void input_history(char mode);
 void print_history();
 
 int main()
@@ -695,6 +695,7 @@ void print_history()
         {
             FILE* file = fopen("history.txt","w");
             fclose(file);
+            return;
         }
         else
         {
