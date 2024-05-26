@@ -5,6 +5,7 @@
 #include<stdlib.h>
 #include<unistd.h>
 #include<string.h>
+
 char COMPUTER = 'X';
 char PLAYER = 'O';
 char player1;
@@ -29,6 +30,7 @@ void help();
 int CharToInt(char response);
 void check_history();
 void input_history(char m);
+void print_history();
 
 int main()
 {
@@ -37,35 +39,40 @@ int main()
     do
     {
         system("cls");
-        printf("- single player\n- multiplayer\n- exit\n- help\n\n->");
+        printf("\tENTER 1,2,3... to choose your desired option\n\n");
+        printf(" 1 -> single player\n 2 -> multiplayer\n 3 -> help\n 4 -> history\n 5 -> exit\n   -> ");
         fflush(stdin);
         scanf(" %c",&response);
 
         response = tolower(response);
         system("cls");
 
-        if(response=='s')
+        if(response=='1')
         {
             vs_computer();
         }
 
-        else if(response == 'm')
+        else if(response == '2')
         {
             multi_player();
         }
-        else if( response == 'e' )
+        else if( response == '3' )
         {
             break;
         }
-        else if(response == 'h')
+        else if(response == '4')
         {
             help();
+        }
+        else if(response=='5')
+        {
+            print_history();
         }
         else
         {
             printf("Invalid input\n");
         }
-    }while (response != 'e');
+    }while (response != 'e'||response == '5');
 
         printf("\n");
         printf("Thank you for playing\n\n");
@@ -231,6 +238,7 @@ void vs_computer()
 
         printf("Choose your icon (X/O) : ");
         scanf(" %c",&response);
+        fflush(stdin);
 
         response = toupper(response);
 
@@ -280,6 +288,8 @@ void vs_computer()
         {
             printf("Want to play again?(Y/N) - ");
             scanf(" %c",&response);
+            fflush(stdin);
+
             response=toupper(response);
 
             if(response!='Y'&&response!='N')
@@ -301,6 +311,7 @@ void multi_player()
         printf("Enter player 1 symbol (X/O) : ");
         scanf(" %c", &player1);
         player1 = toupper(player1);
+        fflush(stdin);
 
         if(player1=='E')
         {
@@ -309,11 +320,13 @@ void multi_player()
         else if( player1 == 'X')
         {
             player2 = 'O';
+            system("cls");
             break;
         }
         else if(player1 == 'O')
         {
             player2 = 'X';
+            system("cls");
             break;
         }
         else if(player1 == 'H')
@@ -345,6 +358,7 @@ void multi_player()
 
             printf("Want to play again?(Y/N) - ");
             scanf(" %c",&response);
+            fflush(stdin);
             response = toupper(response);
 
         }while(response == 'Y');
@@ -371,11 +385,16 @@ void player_moves()
 
                     printf("\nEnter row number : ");
                     scanf(" %c" ,&response);
+
+                    fflush(stdin);
+
                     row=CharToInt(response);
                     row--;
 
                     printf("Enter col number : ");
                     scanf(" %c", &response);
+                    fflush(stdin);
+
                     col=CharToInt(response);
                     col--;
 
@@ -406,11 +425,13 @@ void player_moves()
                     print_board();
                     printf("\nEnter row number : ");
                     scanf(" %c" ,&response);
+                    fflush(stdin);
                     row=CharToInt(response);
                     row--;
 
                     printf("Enter col number : ");
                     scanf(" %c", &response);
+                    fflush(stdin);
                     col=CharToInt(response);
                     col--;
                     system("cls");
@@ -646,10 +667,39 @@ void input_history(char mode)
 }
 void print_history()
 {
+    char r;
+
     FILE*file=fopen("history.txt","r");
     char c;
     while(( c=fgetc(file)) !=EOF)
     {
         printf("%c",c);
     }
+    fclose(file);
+
+    fflush(stdin);
+
+    while(1)
+    {
+        printf("\v1 -> DELETE HISTORY \n  -> ");
+        scanf(" %c",&r);
+        if(tolower(r)=='h')
+        {
+            return;
+        }
+        else if(tolower(r)=='e')
+        {
+            exit(0);
+        }
+        else if(r=='1')
+        {
+            FILE* file = fopen("history.txt","w");
+            fclose(file);
+        }
+        else
+        {
+            printf("INVALID INPUT\n");
+        }
+    }
+
 }
