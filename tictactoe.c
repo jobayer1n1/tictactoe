@@ -39,8 +39,8 @@ int main()
     do
     {
         system("cls");
-        printf("\tENTER 1,2,3... to choose your desired option\n\n");
-        printf(" 1 -> single player\n 2 -> multiplayer\n 3 -> help\n 4 -> history\n 5 -> exit\n   -> ");
+        printf("\tNEVIGATION:\n\tENTER 1,2,3... to choose your desired option\n\th -> home \n\te -> exit\n\n");
+        printf(" 1 -> single player\n 2 -> multiplayer\n 3 -> help\n 4 -> history\n   -> ");
         fflush(stdin);
         scanf(" %c",&response);
 
@@ -58,15 +58,15 @@ int main()
         }
         else if( response == '3' )
         {
-            break;
+            help();
         }
         else if(response == '4')
         {
-            help();
-        }
-        else if(response=='5')
-        {
             print_history();
+        }
+        else if(response=='e')
+        {
+            break;
         }
         else
         {
@@ -661,7 +661,7 @@ void input_history(char mode)
     }
     else if(check_winner()==' ')
     {
-        fprintf(file,"TIME:%s MODE:MULTIPLAYER WINNER:IT'S A TIE\n",timeString);
+        fprintf(file,"TIME:%s MODE:MULTIPLAYER WINNER:TIE\n",timeString);
     }
     fclose(file);
 }
