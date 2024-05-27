@@ -29,7 +29,7 @@ void player_first_move();
 void help();
 int CharToInt(char response);
 void check_history();
-void input_history(char mode);
+void input_history(char m);
 void print_history();
 
 int main()
@@ -66,7 +66,9 @@ int main()
         }
         else if(response=='e')
         {
-            break;
+            printf("\n");
+            printf("Thank you for playing\n\n");
+            exit(0);
         }
         else
         {
@@ -74,8 +76,6 @@ int main()
         }
     }while (response != 'e'||response == '5');
 
-        printf("\n");
-        printf("Thank you for playing\n\n");
 }
 
 void reset_board()
@@ -532,11 +532,11 @@ void help()
     char response;
     int j=1;
 
-    printf("1.The game is played on a grid that's 3 squares by 3 squares.\n");
-    printf("2.Suppose you are X , your friend or the computer is O . Players take turns putting their marks in empty squares.\n");
-    printf("3.The first player to get 3 of their marks in a row (up, down, across, or diagonally) is the winner.\n");
-    printf("4.When all 9 squares are full, the game is over. If no player has 3 marks in a row, the game ends in a tie.\n\n");
-    printf("Winning conditions -> \n");
+    printf("\t1.The game is played on a grid that's 3 squares by 3 squares.\n");
+    printf("\t2.Suppose you are X , your friend or the computer is O . Players take turns putting their marks in empty squares.\n");
+    printf("\t3.The first player to get 3 of their marks in a row (up, down, across, or diagonally) is the winner.\n");
+    printf("\t4.When all 9 squares are full, the game is over. If no player has 3 marks in a row, the game ends in a tie.\n\n");
+    printf("\tWinning conditions -> \n");
 
     for(int i = 0 ; i < 3 ; i++,j++ )
     {
@@ -695,7 +695,6 @@ void print_history()
         {
             FILE* file = fopen("history.txt","w");
             fclose(file);
-            return;
         }
         else
         {
