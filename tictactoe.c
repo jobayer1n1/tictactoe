@@ -5,6 +5,7 @@
 #include<stdlib.h>
 #include<unistd.h>
 #include<string.h>
+
 char COMPUTER = 'X';
 char PLAYER = 'O';
 char player1;
@@ -27,6 +28,12 @@ void computer_first_move();
 void player_first_move();
 void help();
 int CharToInt(char response);
+void check_history();
+void input_history(char m);
+void print_history();
+int check_resume();
+void initialize_resume();
+void load_resume();
 
 int main()
 {
@@ -35,38 +42,43 @@ int main()
     do
     {
         system("cls");
-        printf("- single player\n- multiplayer\n- exit\n- help\n\n->");
+        printf("\tNEVIGATION:\n\tENTER 1,2,3... to choose your desired option\n\th -> home \n\te -> exit\n\n");
+        printf(" 1 -> single player\n 2 -> multiplayer\n 3 -> help\n 4 -> history\n   -> ");
         fflush(stdin);
         scanf(" %c",&response);
 
         response = tolower(response);
         system("cls");
 
-        if(response=='s')
+        if(response=='1')
         {
             vs_computer();
         }
 
-        else if(response == 'm')
+        else if(response == '2')
         {
             multi_player();
         }
-        else if( response == 'e' )
-        {
-            break;
-        }
-        else if(response == 'h')
+        else if( response == '3' )
         {
             help();
+        }
+        else if(response == '4')
+        {
+            print_history();
+        }
+        else if(response=='e')
+        {
+            printf("\n");
+            printf("Thank you for playing\n\n");
+            exit(0);
         }
         else
         {
             printf("Invalid input\n");
         }
-    }while (response != 'e');
+    }while (response != 'e'||response == '5');
 
-        printf("\n");
-        printf("Thank you for playing\n\n");
 }
 
 void reset_board()
@@ -98,6 +110,8 @@ void print_board()
 
 void player_move()
 {
+    FILE* file = fopen("snakeresume.txt","a");
+    
         int row,col;
         char response;
 
@@ -111,6 +125,7 @@ void player_move()
             scanf(" %c" , &response);
             row=CharToInt(response);
             row--;
+            
 
             printf("Enter col number : ");
             scanf(" %c", &response);
@@ -118,7 +133,8 @@ void player_move()
             col--;
 
         } while(board[row][col] != ' ');
-
+    
+        fprintf(file,"%d %d ",row,col);
         board[row][col]= PLAYER ;
         system("cls");
         print_board();
@@ -214,6 +230,7 @@ void print_winner()
     {
         printf("\n\n\tIt's a tie.\n\n");
     }
+
 }
 
 
@@ -228,6 +245,7 @@ void vs_computer()
 
         printf("Choose your icon (X/O) : ");
         scanf(" %c",&response);
+        fflush(stdin);
 
         response = toupper(response);
 
@@ -271,10 +289,14 @@ void vs_computer()
             computer_first_move();
         }
 
+
+        input_history('s');
         do
         {
             printf("Want to play again?(Y/N) - ");
             scanf(" %c",&response);
+            fflush(stdin);
+
             response=toupper(response);
 
             if(response!='Y'&&response!='N')
@@ -296,6 +318,7 @@ void multi_player()
         printf("Enter player 1 symbol (X/O) : ");
         scanf(" %c", &player1);
         player1 = toupper(player1);
+        fflush(stdin);
 
         if(player1=='E')
         {
@@ -304,11 +327,13 @@ void multi_player()
         else if( player1 == 'X')
         {
             player2 = 'O';
+            system("cls");
             break;
         }
         else if(player1 == 'O')
         {
             player2 = 'X';
+            system("cls");
             break;
         }
         else if(player1 == 'H')
@@ -335,8 +360,12 @@ void multi_player()
 
             print_winners();
             printf("\n");
+
+            input_history('m');
+
             printf("Want to play again?(Y/N) - ");
             scanf(" %c",&response);
+            fflush(stdin);
             response = toupper(response);
 
         }while(response == 'Y');
@@ -363,11 +392,16 @@ void player_moves()
 
                     printf("\nEnter row number : ");
                     scanf(" %c" ,&response);
+
+                    fflush(stdin);
+
                     row=CharToInt(response);
                     row--;
 
                     printf("Enter col number : ");
                     scanf(" %c", &response);
+                    fflush(stdin);
+
                     col=CharToInt(response);
                     col--;
 
@@ -381,13 +415,13 @@ void player_moves()
                 } while(board[row][col] != ' '&&check_winner() == ' ');
 
                 board[row][col]=  player1 ;
-                
+
             }
             else if(check_winner()!=' ')
             {
                 return;
             }
-        
+
         if(check_winner()==' ' && check_space() != 0 )
             {
 
@@ -398,11 +432,13 @@ void player_moves()
                     print_board();
                     printf("\nEnter row number : ");
                     scanf(" %c" ,&response);
+                    fflush(stdin);
                     row=CharToInt(response);
                     row--;
 
                     printf("Enter col number : ");
                     scanf(" %c", &response);
+                    fflush(stdin);
                     col=CharToInt(response);
                     col--;
                     system("cls");
@@ -410,7 +446,7 @@ void player_moves()
                     {
                         printf("INVALID INPUT\n");
                     }
-                    
+
                 } while(board[row][col] != ' ');
 
                 board[row][col]=  player2 ;
@@ -503,11 +539,11 @@ void help()
     char response;
     int j=1;
 
-    printf("1.The game is played on a grid that's 3 squares by 3 squares.\n");
-    printf("2.Suppose you are X , your friend or the computer is O . Players take turns putting their marks in empty squares.\n");
-    printf("3.The first player to get 3 of their marks in a row (up, down, across, or diagonally) is the winner.\n");
-    printf("4.When all 9 squares are full, the game is over. If no player has 3 marks in a row, the game ends in a tie.\n\n");
-    printf("Winning conditions -> \n");
+    printf("\t1.The game is played on a grid that's 3 squares by 3 squares.\n");
+    printf("\t2.Suppose you are X , your friend or the computer is O . Players take turns putting their marks in empty squares.\n");
+    printf("\t3.The first player to get 3 of their marks in a row (up, down, across, or diagonally) is the winner.\n");
+    printf("\t4.When all 9 squares are full, the game is over. If no player has 3 marks in a row, the game ends in a tie.\n\n");
+    printf("\tWinning conditions -> \n");
 
     for(int i = 0 ; i < 3 ; i++,j++ )
     {
@@ -571,7 +607,7 @@ void help()
 int CharToInt(char response)
 {
     response=toupper(response);
-        
+
     if(response>= '1' && response <= '3')
     {
         return (int)response-48;
@@ -586,3 +622,168 @@ int CharToInt(char response)
     }
 }
 
+void check_history()
+{
+    FILE* file = fopen("history.txt","r");
+    if(file == NULL)
+    {
+        fclose(file);
+        FILE* file = fopen("history.txt","w");
+        fclose(file);
+        return;
+    }
+    else
+    {
+        fclose(file);
+        return;
+    }
+}
+
+
+void input_history(char mode)
+{
+    time_t currentTime = time(NULL);
+
+    struct tm *localTime = localtime(&currentTime);
+
+    char timeString[100];
+    strftime(timeString, sizeof(timeString), "%H:%M:%S DATE:%d-%m-%Y", localTime);
+
+    FILE* file = fopen("history.txt","a");
+    if(check_winner()==PLAYER&&mode=='s')
+    {
+        fprintf(file,"TIME:%s MODE:SINGLE PLAYER WINNER:YOU\n",timeString);
+    }
+    else if(check_winner()==COMPUTER&&mode=='s')
+    {
+        fprintf(file,"TIME:%s MODE:SINGLE PLAYER WINNER:COMPUTER\n",timeString);
+    }
+    else if(check_winner()==player1&&mode=='m')
+    {
+        fprintf(file,"TIME:%s MODE:MULTIPLAYER WINNER:PLAYER1\n",timeString);
+    }
+    else if(check_winner()==player2&&mode=='m')
+    {
+        fprintf(file,"TIME:%s MODE:MULTIPLAYER WINNER:PLAYER2\n",timeString);
+    }
+    else if(check_winner()==' ')
+    {
+        fprintf(file,"TIME:%s MODE:MULTIPLAYER WINNER:TIE\n",timeString);
+    }
+    fclose(file);
+}
+void print_history()
+{
+    char r;
+
+    FILE*file=fopen("history.txt","r");
+    char c;
+    while(( c=fgetc(file)) !=EOF)
+    {
+        printf("%c",c);
+    }
+    fclose(file);
+
+    fflush(stdin);
+
+    while(1)
+    {
+        printf("\v1 -> DELETE HISTORY \n  -> ");
+        scanf(" %c",&r);
+        if(tolower(r)=='h')
+        {
+            return;
+        }
+        else if(tolower(r)=='e')
+        {
+            exit(0);
+        }
+        else if(r=='1')
+        {
+            FILE* file = fopen("history.txt","w");
+            fclose(file);
+        }
+        else
+        {
+            printf("INVALID INPUT\n");
+        }
+    }
+
+}
+
+int check_resume()
+{
+    FILE* file("snakeresume.txt","r");
+    int i=0;
+    char c;
+    while((c=fgetc(file))!='\n')
+    {
+        if(c!=EOF&&c!=' '&&c!="\0");
+        {
+            i++;
+        }
+    }
+    if(i==0)
+    {
+        fclose(file);
+        return 0;
+    }
+    else
+    {
+        fclose(file);
+        return 1;
+    }
+}
+
+void initialize_resume()
+{
+   FILE* file("snakeresume.txt","r");
+   if(file==NULL)
+   {
+       fclose(file);
+       FILE* file = fopen("snakegame.txt","w");
+       fclose(file);
+       return;
+   }
+   else
+   {
+       fclose(file);
+       return;
+   }
+}
+
+void load_resume()
+{
+    reset_board();
+    char c;
+    
+    while(1)
+    {
+        
+        fscanf(file," %c",&c);
+        
+        row= CharToInt(c);
+        row--;
+        
+        fscanf(file," %c",&c);
+        col= CharToInt(c);
+        col--;
+        
+        board[row][col]=PLAYER;
+        
+        fscanf(file," %c",&c);
+        
+        row= CharToInt(c);
+        row--;
+        
+        fscanf(file," %c",&c);
+        col= CharToInt(c);
+        col--;
+        board[row][col]=COMPUTER;
+        
+        if(feof(file)==EOF)
+        {
+            return;
+        }
+    }
+}
