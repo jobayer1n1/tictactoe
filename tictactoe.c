@@ -31,10 +31,17 @@ int CharToInt(char response);
 void check_history();
 void input_history(char m);
 void print_history();
+int check_resume();
+void initialize_resume();
+void load_resume();
+void save_in_resume();
 
 int main()
 {
     char response;
+    check_history();
+    initialize_resume();
+
 
     do
     {
@@ -69,6 +76,11 @@ int main()
             printf("\n");
             printf("Thank you for playing\n\n");
             exit(0);
+        }
+        else if(response=='5')
+        {
+            load_resume();
+            print_board();
         }
         else
         {
@@ -107,6 +119,7 @@ void print_board()
 
 void player_move()
 {
+
         int row,col;
         char response;
 
@@ -121,6 +134,7 @@ void player_move()
             row=CharToInt(response);
             row--;
 
+
             printf("Enter col number : ");
             scanf(" %c", &response);
             col=CharToInt(response);
@@ -128,6 +142,8 @@ void player_move()
 
         } while(board[row][col] != ' ');
 
+        save_in_resume(row);
+        save_in_resume(col);
         board[row][col]= PLAYER ;
         system("cls");
         print_board();
@@ -167,6 +183,8 @@ void computer_move()
         } while(board[row][col] != ' ');
 
         system("cls");
+        save_in_resume(row);
+        save_in_resume(col);
 
         board[row][col]=COMPUTER;
         print_board();
@@ -264,6 +282,9 @@ void vs_computer()
         PLAYER = 'O';
         COMPUTER = 'X';
     }
+
+    save_in_resume(PLAYER);
+    save_in_resume(COMPUTER);
 
     system("cls");
 
@@ -701,5 +722,90 @@ void print_history()
             printf("INVALID INPUT\n");
         }
     }
+
+}
+
+int check_resume()
+{
+    FILE* file=fopen("snakeresume.txt","r");
+    int i=0;
+    char c;
+    while((c=fgetc(file))!='\n')
+    {
+        if(c!=EOF&&c!=' '&&c!='\0');
+        {
+            i++;
+        }
+    }
+    if(i==0)
+    {
+        fclose(file);
+        return 0;
+    }
+    else
+    {
+        fclose(file);
+        return 1;
+    }
+}
+
+void initialize_resume()
+{
+   FILE* file=fopen("snakeresume.txt","r");
+   if(file==NULL)
+   {
+       fclose(file);
+       FILE* file = fopen("snakegame.txt","w");
+       fclose(file);
+       return;
+   }
+   else
+   {
+       fclose(file);
+       return;
+   }
+}
+
+void load_resume()
+{
+    int row,col,i=0;
+    reset_board();
+    FILE* file = fopen("snakeresume.txt","r");
+    char c;
+
+
+    while(!feof(file))
+    {
+        if(i==0)
+        {
+            fscanf(file,"%c%c",&PLAYER,&COMPUTER);
+            printf("%c%c\n",PLAYER,COMPUTER);
+            i++;
+        }
+        else
+        {
+            fscanf(file," %d ",&row);
+
+            fscanf(file," %d ",&col);
+
+            board[row][col]=PLAYER;
+
+            fscanf(file," %d ",&row);
+
+            fscanf(file," %d ",&col);
+
+            board[row][col]=COMPUTER;
+        }
+    }
+    fclose(file);
+    print_board();
+    sleep(2);
+}
+
+void save_in_resume(int i)
+{
+    FILE*file = fopen("snakeresume.txt","a");
+    fprintf(file," %d ",i);
+    fclose(file);
 
 }
