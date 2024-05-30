@@ -29,35 +29,53 @@ void player_first_move();
 void help();
 int CharToInt(char response);
 void check_history();
-void input_history(char m);
+void input_history(char mode);
 void print_history();
-int resume_availabe();
-void initialize_resume();
-char load_resume();
-void save_int_in_resume(int i);
-void save_char_in_resume(char c);
-void clear_resume();
-void with_resume();
-void without_resume();
-void save_mode_in_resume(char c);
-void resume();
 
 int main()
 {
-    check_history();
-    initialize_resume();
+    char response;
 
- //   printf("%d",resume_availabe());
-
-    if(resume_availabe())
+    do
     {
-        with_resume();
-    }
-    else
-    {
-        without_resume();
-    }
+        system("cls");
+        printf("\tNEVIGATION:\n\tENTER 1,2,3... to choose your desired option\n\th -> home \n\te -> exit\n\n");
+        printf(" 1 -> single player\n 2 -> multiplayer\n 3 -> help\n 4 -> history\n   -> ");
+        fflush(stdin);
+        scanf(" %c",&response);
 
+        response = tolower(response);
+        system("cls");
+
+        if(response=='1')
+        {
+            vs_computer();
+        }
+
+        else if(response == '2')
+        {
+            multi_player();
+        }
+        else if( response == '3' )
+        {
+            help();
+        }
+        else if(response == '4')
+        {
+            print_history();
+        }
+        else if(response=='e')
+        {
+            break;
+        }
+        else
+        {
+            printf("Invalid input\n");
+        }
+    }while (response != 'e'||response == '5');
+
+        printf("\n");
+        printf("Thank you for playing\n\n");
 }
 
 void reset_board()
@@ -89,7 +107,6 @@ void print_board()
 
 void player_move()
 {
-
         int row,col;
         char response;
 
@@ -104,7 +121,6 @@ void player_move()
             row=CharToInt(response);
             row--;
 
-
             printf("Enter col number : ");
             scanf(" %c", &response);
             col=CharToInt(response);
@@ -112,8 +128,6 @@ void player_move()
 
         } while(board[row][col] != ' ');
 
-        save_int_in_resume(row);
-        save_int_in_resume(col);
         board[row][col]= PLAYER ;
         system("cls");
         print_board();
@@ -153,8 +167,6 @@ void computer_move()
         } while(board[row][col] != ' ');
 
         system("cls");
-        save_int_in_resume(row);
-        save_int_in_resume(col);
 
         board[row][col]=COMPUTER;
         print_board();
@@ -211,7 +223,7 @@ void print_winner()
     {
         printf("\n\n\tIt's a tie.\n\n");
     }
-    clear_resume();
+
 }
 
 
@@ -253,14 +265,10 @@ void vs_computer()
         COMPUTER = 'X';
     }
 
-    save_char_in_resume(PLAYER);
-    save_char_in_resume(COMPUTER);
-
     system("cls");
 
     do
     {
-        save_mode_in_resume('s');
         i=rand()%2;
         reset_board();
         print_board();
@@ -461,7 +469,6 @@ void print_winners()
     {
         printf("\nIt's a tie.\n");
     }
-    clear_resume();
 }
 
 void computer_first_move()
@@ -525,11 +532,11 @@ void help()
     char response;
     int j=1;
 
-    printf("\t1.The game is played on a grid that's 3 squares by 3 squares.\n");
-    printf("\t2.Suppose you are X , your friend or the computer is O . Players take turns putting their marks in empty squares.\n");
-    printf("\t3.The first player to get 3 of their marks in a row (up, down, across, or diagonally) is the winner.\n");
-    printf("\t4.When all 9 squares are full, the game is over. If no player has 3 marks in a row, the game ends in a tie.\n\n");
-    printf("\tWinning conditions -> \n");
+    printf("1.The game is played on a grid that's 3 squares by 3 squares.\n");
+    printf("2.Suppose you are X , your friend or the computer is O . Players take turns putting their marks in empty squares.\n");
+    printf("3.The first player to get 3 of their marks in a row (up, down, across, or diagonally) is the winner.\n");
+    printf("4.When all 9 squares are full, the game is over. If no player has 3 marks in a row, the game ends in a tie.\n\n");
+    printf("Winning conditions -> \n");
 
     for(int i = 0 ; i < 3 ; i++,j++ )
     {
@@ -594,7 +601,7 @@ int CharToInt(char response)
 {
     response=toupper(response);
 
-    if(response>= '0' && response <= '3')
+    if(response>= '1' && response <= '3')
     {
         return (int)response-48;
     }
@@ -695,274 +702,4 @@ void print_history()
         }
     }
 
-}
-
-int resume_availabe()
-{
-    FILE* file=fopen("snakeresume.txt","r");
-    int i=0;
-    char c;
-    while((c=fgetc(file))!=EOF)
-    {
-        if(c!=EOF&&c!=' '&&c!='\0');
-        {
-            i++;
-        }
-    }
-    if(i==0)
-    {
-        fclose(file);
-        return 0;
-    }
-    else
-    {
-        fclose(file);
-        return 1;
-    }
-}
-
-void initialize_resume()
-{
-   FILE* file=fopen("snakeresume.txt","r");
-   if(file==NULL)
-   {
-       fclose(file);
-       FILE* file = fopen("snakegame.txt","w");
-       fclose(file);
-       return;
-   }
-   else
-   {
-       fclose(file);
-       return;
-   }
-}
-
-char load_resume()
-{
-    int row,col,i=0,j=0;
-    char value;
-    reset_board();
-    FILE* file = fopen("snakeresume.txt","r");
-    char c;
-
-
-    while((c=fgetc(file))!=EOF)
-    {
-        if(c==' ')
-        {
-            continue;
-        }
-        else
-        {
-            if(i==0)
-            {
-                value = c;
-                i++;
-            }
-            else if(i==1)
-            {
-                PLAYER = c;
-                i++;
-            }
-            else if(i==2)
-            {
-                COMPUTER=c;
-                i++;
-            }
-            else
-            {
-                if(j==0)
-                {
-                    row = CharToInt(c);
-                    j++;
-                }
-                else if(j==1)
-                {
-                    col = CharToInt(c);
-                    board[row][col]=PLAYER;
-                    j++;
-                }
-                else if(j==2)
-                {
-                    row = CharToInt(c);
-                    j++;
-                }
-                else if(j==3)
-                {
-                    col = CharToInt(c);
-                    board[row][col]=COMPUTER;
-                    j=0;
-                }
-
-            }
-        }
-    }
-    fclose(file);
-    sleep(2);
-    return value;
-}
-
-void save_int_in_resume(int i)
-{
-    FILE*file = fopen("snakeresume.txt","a");
-    fprintf(file," %d ",i);
-    fclose(file);
-
-}
-
-void save_char_in_resume(char c)
-{
-    FILE*file = fopen("snakeresume.txt","a");
-    fprintf(file," %c ",c);
-    fclose(file);
-}
-
-void clear_resume()
-{
-    FILE* file = fopen("snakeresume.txt","w");
-    fclose(file);
-}
-
-void without_resume()
-{
-    char response;
-    while(1)
-    {
-        system("cls");
-        printf("\tNEVIGATION:\n\tENTER 1,2,3... to choose your desired option\n\th -> home \n\te -> exit\n\n");
-        printf(" 1 -> single player\n 2 -> multiplayer\n 3 -> help\n 4 -> history\n   -> ");
-        fflush(stdin);
-        scanf(" %c",&response);
-
-        response = tolower(response);
-        system("cls");
-
-        if(response=='1')
-        {
-            vs_computer();
-        }
-
-        else if(response == '2')
-        {
-            multi_player();
-        }
-        else if( response == '3' )
-        {
-            help();
-        }
-        else if(response == '4')
-        {
-            print_history();
-        }
-        else if(response=='e')
-        {
-            printf("\n");
-            printf("Thank you for playing\n\n");
-            exit(0);
-        }
-        else if(response=='5')
-        {
-            load_resume();
-            print_board();
-        }
-        else
-        {
-            printf("Invalid input\n");
-        }
-    }
-}
-
-void with_resume()
-{
-    char response;
-    while(1)
-    {
-        system("cls");
-        printf("\tNEVIGATION:\n\tENTER 1,2,3... to choose your desired option\n\th -> home \n\te -> exit\n\n");
-        printf(" 1 -> Resume\n 2 -> Single player\n 3 -> Multiplayer\n 3 -> Help\n 4 -> History\n   -> ");
-        fflush(stdin);
-        scanf(" %c",&response);
-
-        response = tolower(response);
-        system("cls");
-
-        if(response == '1')
-        {
-            resume();
-        }
-        else if(response=='2')
-        {
-            vs_computer();
-        }
-
-        else if(response == '3')
-        {
-            multi_player();
-        }
-        else if( response == '4' )
-        {
-            help();
-        }
-        else if(response == '5')
-        {
-            print_history();
-        }
-        else if(response=='e')
-        {
-            printf("\n");
-            printf("Thank you for playing\n\n");
-            exit(0);
-        }
-        else
-        {
-            printf("Invalid input\n");
-        }
-    }
-}
-
-void save_mode_in_resume(char c)
-{
-    FILE* file = fopen("snakeresume.txt","w");
-    fprintf(file,"%c",c);
-    fclose(file);
-}
-
-void resume()
-{
-    char c;
-    if(load_resume()=='s')
-    {
-        while(1)
-        {
-            print_board();
-            player_move();
-            if(check_winner()!=' '||check_space()==0)
-            {
-                break;
-            }
-            computer_move();
-            if(check_winner()!=' '||check_space()==0)
-            {
-                break;
-            }
-            system("cls");
-        }
-        print_winner();
-        while(1)
-        {
-            printf(" WANT TO PLAY AGAIN ? (y/N)\n --> ");
-            fflush(stdin);
-            scanf("%c",&c);
-
-            if(c=='h')
-            {
-                return;
-            }
-            else if(c=='e')
-            {
-                exit(0);
-            }
-        }
-    }
 }
